@@ -1,0 +1,34 @@
+{
+  products(first: 2) {
+    edges {
+      node {
+        title
+        id
+        variantsCount {
+          count
+        }
+        media(first: 5) {
+          edges {
+            node {
+              preview {
+                image {
+                  url
+                }
+              }
+            }
+          }
+        }
+        priceRangeV2 {
+          maxVariantPrice {
+            amount
+            currencyCode
+          }
+          minVariantPrice {
+            amount
+            currencyCode
+          }
+        }
+      }
+    }
+  }
+}

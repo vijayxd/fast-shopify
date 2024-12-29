@@ -1,0 +1,46 @@
+{
+  product(id: "gid://shopify/Product/pdid") {
+    tags
+    id
+    productType
+    title
+    description
+    collections(first: 10) {
+      edges {
+        node {
+          title
+        }
+      }
+    }
+    media(first:10){
+      edges{
+        node{
+          preview{
+            image{
+              url
+            }
+            
+            
+          }
+        }
+      }
+    }
+    variants(first: 10) {
+      edges {
+        node {
+          id
+          image {
+            url  
+          }
+          price
+          displayName
+          sku
+          selectedOptions{
+            name
+            value
+          }
+        }
+      }
+    }
+  }
+}

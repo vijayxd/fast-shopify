@@ -1,0 +1,24 @@
+mutation UpdateProductDetails($id: ID!, $title: String!, $tags: [String!], $productType: String, $collectionsToAdd: [ID!], $collectionsToRemove: [ID!]) {
+  productUpdate(
+    input: {id: $id, title: $title, tags: $tags, productType: $productType, collectionsToLeave: $collectionsToRemove, collectionsToJoin: $collectionsToAdd}
+  ) {
+    product {
+      id
+      title
+      tags
+      productType
+      collections(first: 10) {
+        edges {
+          node {
+            id
+            title
+          }
+        }
+      }
+    }
+    userErrors {
+      field
+      message
+    }
+  }
+}
