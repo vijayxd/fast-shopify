@@ -209,7 +209,8 @@ def simplify_product_data(response):
     
     # Simplify collections
     collections = [
-        edge["node"]["title"] for edge in product.get("collections", {}).get("edges", [])
+    {"id": edge["node"]["id"], "title": edge["node"]["title"]}
+    for edge in product.get("collections", {}).get("edges", [])        
     ]
     
     # Simplify media

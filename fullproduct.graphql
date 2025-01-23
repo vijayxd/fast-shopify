@@ -1,5 +1,5 @@
 {
-  product(id: "gid://shopify/Product/pdid") {
+  product(id: "gid://shopify/Product/10120869871921") {
     tags
     id
     productType
@@ -9,6 +9,7 @@
       edges {
         node {
           title
+          id
         }
       }
     }

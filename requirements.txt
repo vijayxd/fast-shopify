@@ -1,0 +1,5 @@
+fastapi
+uvicorn
+sqlalchemy
+mysqlclient  # For PostgreSQL; use 'mysqlclient' for MySQL/MariaDB
+python-dotenv
