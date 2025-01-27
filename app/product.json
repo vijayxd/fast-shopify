@@ -1,0 +1,81 @@
+{
+    "id": 158,
+    "categoryIds": [
+        995,
+        1217
+    ],
+    "offerId": 778182400607,
+    "tags": [
+        "NewArrival",
+        "BestSellers",
+        "HugeStock",
+        "PlusSize"
+    ],
+    "productUrl": null,
+    "supplierId": 24,
+    "sellerOpenId": "BBBOcBJALAiQna6TsJp1kHnSw",
+    "lowPrice": 4.9,
+    "upPrice": 5.31,
+    "platform": "1688",
+    "status": 3,
+    "title": " Solid Color Casual Suit Set",
+    "imgUrls": [
+        "http://gaga-testonea.oss-cn-guangzhou.aliyuncs.com/jpg/jpg/202409/9UI8-20240911191334-1.jpg"
+    ],
+    "videoUrl": "https://cloud.video.taobao.com/play/u/2217671967296/p/1/e/6/t/1/455722799669.mp4",
+    "skuList": [
+        {
+            "id": 276062,
+            "specificationList": [
+                {
+                    "name": "Color",
+                    "value": "Black"
+                },
+                {
+                    "name": "Size",
+                    "value": "XS"
+                }
+            ],
+            "imgUrl": "https://gagastyle.oss-cn-guangzhou.aliyuncs.com/jpg/jpg/202410/7ESK-20241010152126-1.jpg",
+            "skuId": "5489427567539",
+            "usdPrice": 4.9,
+            "stock": 99,
+            "amountOnSale": 99,
+            "status": 1,
+            "packWidth": null,
+            "packHeight": null,
+            "packLength": null,
+            "shipWeight": 520,
+            "pakePost": 0,
+            "sku": "Black-XS",
+            "productTagId": 3
+        }
+        
+        
+        
+    ],
+    "optionsList": [
+        
+        {
+            "imgUrl": null,
+            "name": "Size",
+            "value": "XS",
+            "position": 2
+        },
+        {
+            "imgUrl": null,
+            "name": "Color",
+            "value": "Black",
+            "position": 1
+        }
+        
+    ],
+    "attributeList": [
+        {
+            "name": "Pattern",
+            "value": "Pattern"
+        }
+        
+    ],
+    "description": "<div>description</div>"
+}

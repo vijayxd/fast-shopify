@@ -6,10 +6,14 @@ from app.schemas.user import UserCreate, UserLogin, UserResponse
 from app.crud.user import create_jwt_token, create_user, verify_password
 from app.db.db import get_db
 from app.models.user import User  # Import User model
-
+from app.schemas.user import UserResponse
 from app.crud import user as user_crud
+from app.crud.user import create_account
 from app.utils.mail import  send_verification_email
 from app.utils.token import generate_verification_token
+from app.crud.user import update_user
+from app.schemas.user import UserUpdate
+from app.crud.user import get_user_by_id
 
 router = APIRouter()
 
@@ -44,6 +48,8 @@ def verify_email(token: str, db: Session = Depends(get_db)):
         
         # Mark the user's email as verified
         user.is_verified = True
+
+        create_account(db,user.id)
         db.commit()
 
         return {"message": "Email successfully verified!"}
@@ -55,18 +61,18 @@ def verify_email(token: str, db: Session = Depends(get_db)):
     
 
 @router.post("/register/", response_model=UserResponse)
-def create_user_route(user: UserCreate, db: Session = Depends(get_db)):
+async def create_user_route(user: UserCreate, db: Session = Depends(get_db)):
     # Check if the user already exists
     existing_user = db.query(User).filter(User.email == user.email).first()
     if existing_user:
         raise HTTPException(status_code=400, detail="Email already registered")
     
     # Create the user using the CRUD function
-    new_user = create_user(db=db, user=user)
+    new_user = await create_user(db=db, user=user)
     return new_user
 
 # routes/user.py (add this to the same file)
-from app.crud.user import get_user_by_id
+
 
 
 @router.post("/login/")
@@ -85,7 +91,7 @@ async def login(user: UserLogin, db: Session = Depends(get_db)):
 
     return {"access_token": token, "token_type": "bearer"}
 
-@router.get("/users/{user_id}", response_model=UserResponse)
+@router.get("/{user_id}")
 def get_user_by_id_route(user_id: int, db: Session = Depends(get_db)):
     user = get_user_by_id(db, user_id)
     if not user:
@@ -93,20 +99,9 @@ def get_user_by_id_route(user_id: int, db: Session = Depends(get_db)):
     return user
 
 
-# routes/user.py (add this to the same file)
-@router.get("/users/email/{email}", response_model=UserResponse)
-def get_user_by_email_route(email: str, db: Session = Depends(get_db)):
-    user = get_user_by_email(db, email)
-    if not user:
-        raise HTTPException(status_code=404, detail="User not found")
-    return user
 
 
-# routes/user.py (add this to the same file)
-from app.crud.user import update_user
-from app.schemas.user import UserUpdate
-
-@router.put("/users/{user_id}", response_model=UserResponse)
+@router.put("/{user_id}", response_model=UserResponse)
 def update_user_route(user_id: int, user_update: UserUpdate, db: Session = Depends(get_db)):
     user = update_user(db, user_id, user_update)
     if not user:
@@ -117,11 +112,13 @@ def update_user_route(user_id: int, user_update: UserUpdate, db: Session = Depen
 # routes/user.py (add this to the same file)
 from app.crud.user import delete_user
 
-@router.delete("/users/{user_id}", response_model=UserResponse)
+@router.delete("/{user_id}", response_model=UserResponse)
 def delete_user_route(user_id: int, db: Session = Depends(get_db)):
     user = delete_user(db, user_id)
     if not user:
         raise HTTPException(status_code=404, detail="User not found")
     return user
+
+
 
 

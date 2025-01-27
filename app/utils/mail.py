@@ -16,12 +16,33 @@ conf = ConnectionConfig(
     # TEMPLATE_FOLDER = "./templates",
 )
 
+
+# Send invitation email
+async def send_invitation_email(email: str, token: str):
+    message = MessageSchema(
+        subject="You have been invited to join our platform",
+        recipients=[email],  # List of recipients
+        body=f"Click the link to accept the invitation: http://192.168.74.100:8000/accept-invitation?token={token}",
+        subtype="html"
+    )
+
+    fm = FastMail(conf)
+    
+    try:
+            # Send the email
+        await fm.send_message(message)
+        return {"message": "Invitation email sent successfully"}
+    except Exception as e:
+            print(f"Failed to send email: {e}")
+            raise HTTPException(status_code=500, detail="Failed to send verification email.")
+    
+
 # Send verification email
 async def send_verification_email(email: str, token: str):
     message = MessageSchema(
         subject="Please verify your email",
         recipients=[email],  # List of recipients
-        body=f"Click the link to verify your email: http://127.0.0.1:8000/verify-email?token={token}",
+        body=f"Click the link to verify your email: http://192.168.74.100:8000/users/verify-email?token={token}",
         subtype="html"
     )
     

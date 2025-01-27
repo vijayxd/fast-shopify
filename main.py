@@ -1,7 +1,9 @@
 from sqlmodel import SQLModel, create_engine
 from fastapi import FastAPI
+from app.seed.roles import check_and_seed_roles
 from user_routes import router as user_router
 from shopify_oauth import router as shopify_oauth
+from app.db.db import engine, SessionLocal
 
 app = FastAPI()
 

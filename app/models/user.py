@@ -18,4 +18,6 @@ class User(Base):
     created_at = Column(String(255), default=datetime.now(timezone.utc))
     updated_at = Column(String(255), default=datetime.now(timezone.utc), onupdate=datetime.now(timezone.utc))
 
-  
+    accounts = relationship("Account", secondary="user_account_roles", overlaps="roles")
+
+    

@@ -1,20 +1,36 @@
 # app/crud/user.py
 from datetime import datetime, timedelta, timezone
+from fastapi import Depends, HTTPException
 import jwt
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, joinedload
+from app.models.account import Account
+from app.models.role import UserAccountRole, Role
 from app.models.user import User
-from app.schemas.user import UserCreate, UserUpdate
+from app.schemas.user import UserCreate, UserUpdate, UserDetailsResponse
 from app.security.password import hash_password, verify_password  # Assuming you have a separate file for hashing
 from app.utils.mail import send_verification_email  # Assuming utility for email sending
 import uuid
 from passlib.context import CryptContext
-
+from app.models.account import Account
+from app.models.permission import Permission, RolePermission
 from app.utils.token import generate_verification_token
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 
+def create_account(db:Session, user_id:int):
+    acc = Account(name="Default",user_id=user_id)
+    db.add(acc)
+    db.commit()
+    db.refresh(acc)
+
+    userRole = UserAccountRole(user_id = user_id,account_id= acc.id,role_id=1)
+    db.add(userRole)
+    db.commit()
+    db.refresh(userRole)
+
+
 def create_jwt_token(email: str) -> str:
-    expiration_time = timedelta(hours=1)
+    expiration_time = timedelta(days=7)
     payload = {
         "sub": email,
         "exp": datetime.now(timezone.utc) + expiration_time
@@ -26,7 +42,7 @@ def create_jwt_token(email: str) -> str:
 def verify_password(plain_password: str, hashed_password: str) -> bool:
     return pwd_context.verify(plain_password, hashed_password)
 # Create a new user
-def create_user(db: Session, user: UserCreate):
+async def create_user(db: Session, user: UserCreate):
     db_user = User(
         first_name=user.first_name,
         last_name=user.last_name,
@@ -36,7 +52,7 @@ def create_user(db: Session, user: UserCreate):
     db.add(db_user)
     db.commit()
     db.refresh(db_user)
-    send_verification_email(db_user.email, generate_verification_token(db_user.email))
+    await send_verification_email(db_user.email, generate_verification_token(db_user.email))
     return db_user
 
 # Update user data
@@ -61,7 +77,15 @@ def update_user(db: Session, user_id: int, user_update: UserUpdate):
 
 # Get a user by ID
 def get_user_by_id(db: Session, user_id: int):
-    return db.query(User).filter(User.id == user_id).first()
+    user = (
+        db.query(User)
+        .options(
+            joinedload(User.accounts).joinedload(Account.roles) # Eager load accounts
+        )
+        .filter(User.id == user_id)
+        .first()
+    )
+    return user
 
 # Get a user by email
 def get_user_by_email(db: Session, email: str):
