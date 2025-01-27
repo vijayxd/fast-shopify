@@ -80,7 +80,7 @@ def get_user_by_id(db: Session, user_id: int):
     user = (
         db.query(User)
         .options(
-            joinedload(User.accounts).joinedload(Account.roles) # Eager load accounts
+            joinedload(User.accounts).joinedload(Account.user_account_roles) # Eager load accounts
         )
         .filter(User.id == user_id)
         .first()

@@ -15,5 +15,5 @@ class Account(Base):
     # Relationships
     invitations = relationship("Invitation", back_populates="account")
     users = relationship("User", secondary="user_account_roles", back_populates="accounts")
-    roles = relationship("Role", secondary="user_account_roles", overlaps="users")
+    user_account_roles = relationship("UserAccountRole", back_populates="account")
 

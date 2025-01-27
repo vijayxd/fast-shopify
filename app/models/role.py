@@ -19,9 +19,6 @@ class Role(Base):
 
     
 
-    accounts = relationship("Account", secondary="user_account_roles", back_populates="roles", viewonly=True)
-
-
 class UserAccountRole(Base):
     __tablename__ = "user_account_roles"
 
@@ -29,6 +26,7 @@ class UserAccountRole(Base):
     user_id = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"), nullable=False)
     account_id = Column(Integer, ForeignKey("accounts.id"))  # Could link to an Account table in the future
     role_id = Column(Integer, ForeignKey("roles.id", ondelete="CASCADE"), nullable=False)
+    account = relationship("Account", back_populates="user_account_roles")
 
     custom_permissions = relationship(
         "Permission",
